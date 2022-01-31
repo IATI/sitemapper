@@ -13,7 +13,7 @@
         "applicationinsights": "^2.2.0",
         "dotenv": "^15.0.0",
         "node-fetch": "^2.6.7",
-        "redis": "^4.0.2"
+        "redis": "^4.0.3"
     },
     "devDependencies": {
         "@prettier/plugin-xml": "^1.2.0",
