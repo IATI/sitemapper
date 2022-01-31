@@ -16,6 +16,7 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x' # set this to the node version to use
   DSS_API_KEY: ${{ secrets.DSS_API_KEY }}
+  KV_NAME: ${{ secrets.DEV_KEY_VAULT_NAME }}
 
 jobs:
   should_run:
@@ -50,6 +51,16 @@ jobs:
           app-name: ${{env.NAME}}-${{env.STAGE}}
           app-settings-json: |
             [
+                {
+                    "name": "AzureWebJobsSecretStorageType",
+                    "value": "keyvault",
+                    "slotSetting": false
+                },
+                {
+                    "name": "AzureWebJobsSecretStorageKeyVaultName",
+                    "value": "${{ env.KV_NAME }}",
+                    "slotSetting": false
+                },
                 {
                     "name": "DSS_API_KEY",
                     "value": "${{ env.DSS_API_KEY }}",
