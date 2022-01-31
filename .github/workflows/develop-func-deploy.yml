@@ -44,7 +44,7 @@ jobs:
           npm install --production
           popd
 
-      - name: Set Env variables for connecting to Redis instance and storing api keys in key vault
+      - name: Set Env variables for connecting to DSS API instance
         uses: Azure/appservice-settings@v1.1.1
         with:
           app-name: ${{env.NAME}}-${{env.STAGE}}
