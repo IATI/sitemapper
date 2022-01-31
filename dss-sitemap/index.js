@@ -1,6 +1,15 @@
 const axios = require('axios');
 const config = require('../config/config');
 
+const encodeXML = function (str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+};
+
 const axiosConfig = {
     headers: {
         'Ocp-Apim-Subscription-Key': config.DSS_API_KEY,
@@ -38,7 +47,7 @@ const getSingleSitemap = async (sitemapNumber) => {
     const activities = await getAllActivities();
     sitemapString += activities
         .slice(sitemapNumber * sitemapLimit, (sitemapNumber + 1) * sitemapLimit)
-        .map((d) => `<url><loc>${siteUrl}activity/${encodeURI(d)}</loc></url>`)
+        .map((d) => `<url><loc>${siteUrl}activity/${encodeXML(encodeURI(d))}</loc></url>`)
         .join('');
     sitemapString += '</urlset>';
     return sitemapString;
