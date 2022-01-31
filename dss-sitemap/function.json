@@ -1,12 +1,14 @@
 {
     "bindings": [
         {
-            "authLevel": "Function",
+            "authLevel": "anonymous",
             "type": "HttpTrigger",
             "direction": "in",
             "name": "req",
-            "methods": ["get"],
-            "route": "pub/"
+            "methods": [
+                "get"
+            ],
+            "route": "dss/sitemap-{id}.xml"
         },
         {
             "type": "http",

@@ -6,19 +6,16 @@ on:
       - '**/README.md' # don't run on README.md file updates anywhere in repo
       - '**/dependabot.yml'
     branches:
-      - notabranch # update with develop when ready to deploy to Azure
+      - develop # update with develop when ready to deploy to Azure
   # schedule: Uncomment when setting up template, ensures dependabot updates are deployed to dev at least daily
   #   - cron: '17 04 * * *' # 0417am daily
 
 env:
   STAGE: dev # suffix to indicate environment stage
-  NAME: func-iati-servicename
+  NAME: func-iati-sitemapper
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x' # set this to the node version to use
-  REDIS_HOSTNAME: ${{ secrets.DEV_REDIS_HOSTNAME }}
-  REDIS_PORT: ${{ secrets.REDIS_PORT }}
-  REDIS_KEY: ${{ secrets.DEV_REDIS_KEY }}
-  KV_NAME: ${{ secrets.DEV_KEY_VAULT_NAME }}
+  DSS_API_KEY: ${{ secrets.DSS_API_KEY }}
 
 jobs:
   should_run:
@@ -54,33 +51,8 @@ jobs:
           app-settings-json: |
             [
                 {
-                    "name": "REDIS_HOSTNAME",
-                    "value": "${{ env.REDIS_HOSTNAME }}",
-                    "slotSetting": false
-                },
-                {
-                    "name": "REDIS_KEY",
-                    "value": "${{ env.REDIS_KEY }}",
-                    "slotSetting": false
-                },
-                {
-                    "name": "REDIS_PORT",
-                    "value": "${{ env.REDIS_PORT }}",
-                    "slotSetting": false
-                },
-                {
-                    "name": "AzureWebJobsSecretStorageKeyVaultName",
-                    "value": "${{ env.KV_NAME }}",
-                    "slotSetting": false
-                },
-                {
-                    "name": "AzureWebJobsSecretStorageType",
-                    "value": "keyvault",
-                    "slotSetting": false
-                },
-                {
-                    "name": "AzureWebJobsSecretStorageKeyVaultName",
-                    "value": "${{ env.KV_NAME }}",
+                    "name": "DSS_API_KEY",
+                    "value": "${{ env.DSS_API_KEY }}",
                     "slotSetting": false
                 }
             ]
@@ -109,4 +81,4 @@ jobs:
 
       - name: 'Run integration tests' # Update -e environment file with an environment that points to your deployed instance
         run: |
-          newman run integration-tests/UPDATE_ME.postman_collection.json -e integration-tests/envs/UPDATE_ME.postman_environment.json --working-dir integration-tests/test-files
+          newman run integration-tests/func-iati-sitemapper.postman_collection.json -e integration-tests/envs/develop.postman_environment.json --working-dir integration-tests/test-files

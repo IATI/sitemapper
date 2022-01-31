@@ -11,6 +11,7 @@
     "author": "IATI",
     "dependencies": {
         "applicationinsights": "^2.2.0",
+        "axios": "^0.25.0",
         "dotenv": "^15.0.0",
         "node-fetch": "^2.6.7",
         "redis": "^4.0.2"
