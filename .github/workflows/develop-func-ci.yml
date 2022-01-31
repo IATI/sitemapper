@@ -1,0 +1,42 @@
+name: CI_AutoMerge_Dependabot
+
+on:
+  pull_request:
+    paths-ignore: # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      - '**/README.md'
+      - '**/dependabot.yml'
+    branches:
+      - develop
+
+env:
+  NODE_VERSION: '14.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2.4.0
+
+      - name: 'Setup Node ${{ env.NODE_VERSION }} Environment'
+        uses: actions/setup-node@v2.5.1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 'Install Dependencies with Npm'
+        run: |
+          npm i -g npm
+          npm set-script prepare ""
+          npm install --production
+
+  automerge:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3.0.2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
