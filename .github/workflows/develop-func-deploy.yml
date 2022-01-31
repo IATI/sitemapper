@@ -45,28 +45,28 @@ jobs:
           npm install --production
           popd
 
-      - name: Set Env variables for connecting to DSS API instance
-        uses: Azure/appservice-settings@v1.1.1
-        with:
-          app-name: ${{env.NAME}}-${{env.STAGE}}
-          app-settings-json: |
-            [
-                {
-                    "name": "AzureWebJobsSecretStorageType",
-                    "value": "keyvault",
-                    "slotSetting": false
-                },
-                {
-                    "name": "AzureWebJobsSecretStorageKeyVaultName",
-                    "value": "${{ env.KV_NAME }}",
-                    "slotSetting": false
-                },
-                {
-                    "name": "DSS_API_KEY",
-                    "value": "${{ env.DSS_API_KEY }}",
-                    "slotSetting": false
-                }
-            ]
+      # - name: Set Env variables for connecting to DSS API instance
+      #   uses: Azure/appservice-settings@v1.1.1
+      #   with:
+      #     app-name: ${{env.NAME}}-${{env.STAGE}}
+      #     app-settings-json: |
+      #       [
+      #           {
+      #               "name": "AzureWebJobsSecretStorageType",
+      #               "value": "keyvault",
+      #               "slotSetting": false
+      #           },
+      #           {
+      #               "name": "AzureWebJobsSecretStorageKeyVaultName",
+      #               "value": "${{ env.KV_NAME }}",
+      #               "slotSetting": false
+      #           },
+      #           {
+      #               "name": "DSS_API_KEY",
+      #               "value": "${{ env.DSS_API_KEY }}",
+      #               "slotSetting": false
+      #           }
+      #       ]
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v1.4.3
