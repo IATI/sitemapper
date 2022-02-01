@@ -15,8 +15,11 @@ env:
   NAME: func-iati-sitemapper
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x' # set this to the node version to use
+  REDIS_HOSTNAME: ${{ secrets.DEV_REDIS_HOSTNAME }}
+  REDIS_PORT: ${{ secrets.REDIS_PORT }}
+  REDIS_KEY: ${{ secrets.DEV_REDIS_KEY }}
   DSS_API_KEY: ${{ secrets.DSS_API_KEY }}
-  KV_NAME: ${{ secrets.DEV_KEY_VAULT_NAME }}
+  KV_URI: ${{ secrets.DEV_KV_URI }}
 
 jobs:
   should_run:
@@ -45,28 +48,43 @@ jobs:
           npm install --production
           popd
 
-      # - name: Set Env variables for connecting to DSS API instance
-      #   uses: Azure/appservice-settings@v1.1.1
-      #   with:
-      #     app-name: ${{env.NAME}}-${{env.STAGE}}
-      #     app-settings-json: |
-      #       [
-      #           {
-      #               "name": "AzureWebJobsSecretStorageType",
-      #               "value": "keyvault",
-      #               "slotSetting": false
-      #           },
-      #           {
-      #               "name": "AzureWebJobsSecretStorageKeyVaultName",
-      #               "value": "${{ env.KV_NAME }}",
-      #               "slotSetting": false
-      #           },
-      #           {
-      #               "name": "DSS_API_KEY",
-      #               "value": "${{ env.DSS_API_KEY }}",
-      #               "slotSetting": false
-      #           }
-      #       ]
+      - name: Set Env variables for connecting to DSS API instance
+        uses: Azure/appservice-settings@v1.1.1
+        with:
+          app-name: ${{env.NAME}}-${{env.STAGE}}
+          app-settings-json: |
+            [
+                {
+                    "name": "REDIS_HOSTNAME",
+                    "value": "${{ env.REDIS_HOSTNAME }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "REDIS_KEY",
+                    "value": "${{ env.REDIS_KEY }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "REDIS_PORT",
+                    "value": "${{ env.REDIS_PORT }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "AzureWebJobsSecretStorageType",
+                    "value": "keyvault",
+                    "slotSetting": false
+                },
+                {
+                    "name": "AzureWebJobsSecretStorageKeyVaultUri",
+                    "value": "${{ env.KV_URI }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "DSS_API_KEY",
+                    "value": "${{ env.DSS_API_KEY }}",
+                    "slotSetting": false
+                }
+            ]
 
       - name: 'Login via Azure CLI'
         uses: azure/login@v1.4.3
