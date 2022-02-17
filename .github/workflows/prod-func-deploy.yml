@@ -47,7 +47,7 @@ jobs:
       - name: 'Login via Azure CLI'
         uses: azure/login@v1.4.3
         with:
-          creds: ${{ secrets.DEV_AZURE_CREDENTIALS }} # Service Principal credentials saved in GitHub Secrets
+          creds: ${{ secrets.PROD_AZURE_CREDENTIALS }} # Service Principal credentials saved in GitHub Secrets
 
       - name: Set Env variables for connecting to DSS API instance
         uses: Azure/appservice-settings@v1.1.1
