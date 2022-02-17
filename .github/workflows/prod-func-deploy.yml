@@ -1,0 +1,119 @@
+name: Deploy_To_Prod_Function_On_Release
+
+on:
+  release:
+    types: [published]
+
+env:
+  STAGE: PROD # suffix to indicate environment stage
+  NAME: func-iati-sitemapper
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '14.x' # set this to the node version to use
+  DDS_API_URL: ${{ secrets.PROD_DDS_API_URL }}
+  DDS_FRONTEND_URL: ${{ secrets.PROD_DDS_FRONTEND_URL }}
+  REDIS_HOSTNAME: ${{ secrets.PROD_REDIS_HOSTNAME }}
+  REDIS_PORT: ${{ secrets.REDIS_PORT }}
+  REDIS_KEY: ${{ secrets.PROD_REDIS_KEY }}
+  DSS_API_KEY: ${{ secrets.PROD_DSS_API_KEY }}
+  KV_URI: ${{ secrets.PROD_KV_URI }}
+
+jobs:
+  should_run:
+    uses: IATI/.github/.github/workflows/should_run.yaml@main
+
+  build-deploy:
+    needs: should_run
+    if: ${{ needs.should_run.outputs.should_run == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2.4.0
+
+      - name: 'Setup Node ${{ env.NODE_VERSION }} Environment'
+        uses: actions/setup-node@v2.5.1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 'Resolve Project Dependencies Using Npm'
+        shell: bash
+        run: |
+          npm i -g npm
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          npm set-script prepare ""
+          npm install --production
+          popd
+
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1.4.3
+        with:
+          creds: ${{ secrets.DEV_AZURE_CREDENTIALS }} # Service Principal credentials saved in GitHub Secrets
+
+      - name: Set Env variables for connecting to DSS API instance
+        uses: Azure/appservice-settings@v1.1.1
+        with:
+          app-name: ${{env.NAME}}-${{env.STAGE}}
+          app-settings-json: |
+            [
+                {
+                    "name": "DDS_API_URL",
+                    "value": "${{ env.DDS_API_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "DDS_FRONTEND_URL",
+                    "value": "${{ env.DDS_FRONTEND_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "REDIS_HOSTNAME",
+                    "value": "${{ env.REDIS_HOSTNAME }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "REDIS_KEY",
+                    "value": "${{ env.REDIS_KEY }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "REDIS_PORT",
+                    "value": "${{ env.REDIS_PORT }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "AzureWebJobsSecretStorageType",
+                    "value": "keyvault",
+                    "slotSetting": false
+                },
+                {
+                    "name": "AzureWebJobsSecretStorageKeyVaultUri",
+                    "value": "${{ env.KV_URI }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "DSS_API_KEY",
+                    "value": "${{ env.DSS_API_KEY }}",
+                    "slotSetting": false
+                }
+            ]
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1.4.4
+        with:
+          app-name: ${{ env.NAME }}-${{ env.STAGE }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+
+  integration-test:
+    needs: build-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2.4.0
+
+      - name: 'Install newman'
+        run: |
+          sudo npm i -g newman
+
+      - name: 'Run integration tests' # Update -e environment file with an environment that points to your deployed instance
+        run: |
+          newman run integration-tests/func-iati-sitemapper.postman_collection.json -e integration-tests/envs/prod.postman_environment.json --working-dir integration-tests/test-files
