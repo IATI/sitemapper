@@ -15,10 +15,12 @@ env:
   NAME: func-iati-sitemapper
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x' # set this to the node version to use
+  DDS_API_URL: ${{ secrets.DEV_DDS_API_URL }}
+  DDS_FRONTEND_URL: ${{ secrets.DEV_DDS_FRONTEND_URL }}
   REDIS_HOSTNAME: ${{ secrets.DEV_REDIS_HOSTNAME }}
   REDIS_PORT: ${{ secrets.REDIS_PORT }}
   REDIS_KEY: ${{ secrets.DEV_REDIS_KEY }}
-  DSS_API_KEY: ${{ secrets.DSS_API_KEY }}
+  DSS_API_KEY: ${{ secrets.DEV_DSS_API_KEY }}
   KV_URI: ${{ secrets.DEV_KV_URI }}
 
 jobs:
@@ -59,6 +61,16 @@ jobs:
           app-name: ${{env.NAME}}-${{env.STAGE}}
           app-settings-json: |
             [
+                {
+                    "name": "DDS_API_URL",
+                    "value": "${{ env.DDS_API_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "DDS_FRONTEND_URL",
+                    "value": "${{ env.DDS_FRONTEND_URL }}",
+                    "slotSetting": false
+                },
                 {
                     "name": "REDIS_HOSTNAME",
                     "value": "${{ env.REDIS_HOSTNAME }}",
