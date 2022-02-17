@@ -19,32 +19,41 @@ const axiosConfig = {
         'Ocp-Apim-Subscription-Key': config.DSS_API_KEY,
     },
 };
-const siteUrl = 'https://dev-ds-search.iatistandard.org/';
-const activityFacetBaseUrl =
-    'https://dev-api.iatistandard.org/dss/activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0';
+const siteUrl = config.DDS_FRONTEND_URL;
+const activityFacetBaseUrl = `${config.DDS_API_URL}activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0`;
 
 const getActivityCount = async () => {
     if ((await aExists('dss_sitemap_count')) === 0) {
-        const countUrl = `${activityFacetBaseUrl  }&facet.limit=0`;
-        const activityCount = await axios.get(countUrl, axiosConfig).then((result) => result.data.response.numFound);
+        const countUrl = `${activityFacetBaseUrl}&facet.limit=0`;
+        const activityCount = await axios
+            .get(countUrl, axiosConfig)
+            .then((result) => result.data.response.numFound);
         await aSetex('dss_sitemap_count', cacheSeconds, activityCount);
         return activityCount;
     }
     const activityCount = await aGet('dss_sitemap_count');
     return activityCount;
-
 };
 
 const getActivitySlice = async (chunkIndex) => {
     if ((await aExists(`dss_sitemap_chunk_${chunkIndex}`)) === 0) {
-        const sliceUrl = `${activityFacetBaseUrl  }&facet.limit=${  sitemapLimit  }&facet.offset=${  chunkIndex * sitemapLimit}`;
-        const activitySlice = await axios.get(sliceUrl, axiosConfig).then((result) => result.data.facet_counts.facet_fields.iati_identifier.filter((d, i) => i % 2 === 0));
-        await aSetex(`dss_sitemap_chunk_${chunkIndex}`, cacheSeconds, JSON.stringify(activitySlice))
+        const sliceUrl = `${activityFacetBaseUrl}&facet.limit=${sitemapLimit}&facet.offset=${
+            chunkIndex * sitemapLimit
+        }`;
+        const activitySlice = await axios
+            .get(sliceUrl, axiosConfig)
+            .then((result) =>
+                result.data.facet_counts.facet_fields.iati_identifier.filter((d, i) => i % 2 === 0)
+            );
+        await aSetex(
+            `dss_sitemap_chunk_${chunkIndex}`,
+            cacheSeconds,
+            JSON.stringify(activitySlice)
+        );
         return activitySlice;
     }
     const activitySlice = await aGet(`dss_sitemap_chunk_${chunkIndex}`);
     return JSON.parse(activitySlice);
-
 };
 
 const getSitemapIndex = async () => {

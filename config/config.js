@@ -6,6 +6,8 @@ module.exports = {
     VERSION: version,
     NODE_ENV: process.env.NODE_ENV,
     NS_PER_SEC: 1e9,
+    DDS_API_URL: process.env.DDS_API_URL,
+    DDS_FRONTEND_URL: process.env.DDS_FRONTEND_URL,
     DSS_API_KEY: process.env.DSS_API_KEY,
     REDIS_PORT: process.env.REDIS_PORT || 6379,
     REDIS_CACHE_SEC: process.env.REDIS_CACHE_SEC || 86400,
