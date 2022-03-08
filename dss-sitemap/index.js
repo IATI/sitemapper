@@ -4,6 +4,7 @@ const config = require('../config/config');
 
 const sitemapLimit = 25000;
 const cacheSeconds = 6000;
+const additionalPages = ['about', 'advanced', 'simple'];
 
 const encodeXML = function (str) {
     return str
@@ -75,6 +76,11 @@ const getSingleSitemap = async (sitemapNumber) => {
     sitemapString += activities
         .map((d) => `<url><loc>${siteUrl}activity/${encodeXML(encodeURI(d))}</loc></url>`)
         .join('');
+    if (activities.length < sitemapLimit && sitemapLimit < 50000) {
+        sitemapString += additionalPages
+            .map((d) => `<url><loc>${siteUrl}${encodeXML(encodeURI(d))}</loc></url>`)
+            .join('');
+    }
     sitemapString += '</urlset>';
     return sitemapString;
 };
