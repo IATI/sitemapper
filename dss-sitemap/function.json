@@ -6,7 +6,8 @@
             "direction": "in",
             "name": "req",
             "methods": [
-                "get"
+                "get",
+                "head"
             ],
             "route": "dss/sitemap-{id}.xml"
         },
