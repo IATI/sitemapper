@@ -17,7 +17,7 @@
         "redis": "^3.1.2"
     },
     "devDependencies": {
-        "@prettier/plugin-xml": "^1.2.0",
+        "@prettier/plugin-xml": "^2.0.1",
         "eslint": "^8.11.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-prettier": "^8.5.0",
