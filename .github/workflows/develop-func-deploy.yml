@@ -17,6 +17,7 @@ env:
   NODE_VERSION: '14.x' # set this to the node version to use
   DDS_API_URL: ${{ secrets.DEV_DDS_API_URL }}
   DDS_FRONTEND_URL: ${{ secrets.DEV_DDS_FRONTEND_URL }}
+  DDS_SITEMAPPER_URL: ${{ secrets.DEV_DDS_SITEMAPPER_URL }}
   REDIS_HOSTNAME: ${{ secrets.DEV_REDIS_HOSTNAME }}
   REDIS_PORT: ${{ secrets.REDIS_PORT }}
   REDIS_KEY: ${{ secrets.DEV_REDIS_KEY }}
@@ -69,6 +70,11 @@ jobs:
                 {
                     "name": "DDS_FRONTEND_URL",
                     "value": "${{ env.DDS_FRONTEND_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "DDS_SITEMAPPER_URL",
+                    "value": "${{ env.DDS_SITEMAPPER_URL }}",
                     "slotSetting": false
                 },
                 {
