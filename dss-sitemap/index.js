@@ -21,6 +21,7 @@ const axiosConfig = {
     },
 };
 const siteUrl = config.DDS_FRONTEND_URL;
+const funcUrl = config.DDS_SITEMAPPER_URL;
 const activityFacetBaseUrl = `${config.DDS_API_URL}activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0`;
 
 const getActivityCount = async () => {
@@ -69,6 +70,18 @@ const getSitemapIndex = async () => {
     return sitemapIndexString;
 };
 
+const getSitemapIndexBing = async () => {
+    let sitemapIndexString =
+        '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    const activityCount = await getActivityCount();
+    const sitemapExtent = Math.ceil(activityCount / sitemapLimit);
+    sitemapIndexString += Array.from(Array(sitemapExtent).keys())
+        .map((i) => `<sitemap><loc>${funcUrl}sitemap-${i}.xml</loc></sitemap>`)
+        .join('');
+    sitemapIndexString += '</sitemapindex>';
+    return sitemapIndexString;
+};
+
 const getSingleSitemap = async (sitemapNumber) => {
     let sitemapString =
         '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">';
@@ -91,6 +104,8 @@ module.exports = async (context, req) => {
 
     if (sitemapId === 'index') {
         responseMessage = await getSitemapIndex();
+    } else if (sitemapId === 'bing-index') {
+        responseMessage = await getSitemapIndexBing();
     } else {
         const sitemapNumber = parseInt(sitemapId, 10);
         responseMessage = await getSingleSitemap(sitemapNumber);
