@@ -11,7 +11,7 @@ env:
   NODE_VERSION: '14.x' # set this to the node version to use
   DDS_API_URL: ${{ secrets.PROD_DDS_API_URL }}
   DDS_FRONTEND_URL: ${{ secrets.PROD_DDS_FRONTEND_URL }}
-  DDS_FRONTEND_URL: ${{ secrets.PROD_DDS_SITEMAPPER_URL }}
+  DDS_SITEMAPPER_URL: ${{ secrets.PROD_DDS_SITEMAPPER_URL }}
   REDIS_HOSTNAME: ${{ secrets.PROD_REDIS_HOSTNAME }}
   REDIS_PORT: ${{ secrets.REDIS_PORT }}
   REDIS_KEY: ${{ secrets.PROD_REDIS_KEY }}
