@@ -1,0 +1,20 @@
+{
+    "bindings": [
+        {
+            "authLevel": "anonymous",
+            "type": "HttpTrigger",
+            "direction": "in",
+            "name": "req",
+            "methods": [
+                "get",
+                "head"
+            ],
+            "route": "dss/submit-bing"
+        },
+        {
+            "type": "http",
+            "direction": "out",
+            "name": "res"
+        }
+    ]
+}
