@@ -16,6 +16,7 @@ env:
   REDIS_KEY: ${{ secrets.PROD_REDIS_KEY }}
   DSS_API_KEY: ${{ secrets.PROD_DSS_API_KEY }}
   KV_URI: ${{ secrets.PROD_KV_URI }}
+  BING_API_KEY: ${{ secrets.PROD_BING_API_KEY }}
 
 jobs:
   build-deploy:
@@ -88,6 +89,11 @@ jobs:
                 {
                     "name": "DSS_API_KEY",
                     "value": "${{ env.DSS_API_KEY }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "BING_API_KEY",
+                    "value": "${{ env.BING_API_KEY }}",
                     "slotSetting": false
                 }
             ]
