@@ -56,19 +56,17 @@ const submitSingleJson = async (sitemapNumber, apiKey) => {
     const result = await axios
         .post(`${bingSubmissionUrl}${apiKey}`, sitemapJson)
         .then((res) => ({
-                status: res.status,
-                message: res.data,
-                funcMessage: `Attempted Bing Submission of ${apiQuota} URLs for index ${sitemapNumber}`,
-            }))
+            status: res.status,
+            message: res.data,
+            funcMessage: `Attempted Bing Submission of ${apiQuota} URLs for index ${sitemapNumber}`,
+        }))
         .catch((error) => ({
-                status: error.response.status,
-                message: error.response.data,
-                funcMessage: `Attempted Bing Submission of ${apiQuota} URLs for index ${sitemapNumber}`,
-            }));
+            status: error.response.status,
+            message: error.response.data,
+            funcMessage: `Attempted Bing Submission of ${apiQuota} URLs for index ${sitemapNumber}`,
+        }));
     return result;
 };
-
-const isValid = (status) => status === 200;
 
 module.exports = async (context, req) => {
     const apiKey = req.query.api_key;
@@ -91,30 +89,32 @@ module.exports = async (context, req) => {
         bookmark = 0;
     }
 
-    const resultPromises = [];
-    for (let attempt = 0; attempt < dailyAttempts; attempt += 1) {
+    const results = [];
+    let attempt = 0;
+    for (attempt; attempt < dailyAttempts; attempt += 1) {
         const attemptedIndex = bookmark + attempt;
         if (attemptedIndex > extent) {
             break;
         }
-        const resultPromise = submitSingleJson(attemptedIndex, apiKey);
-        resultPromises.push(resultPromise);
+        /* eslint-disable no-await-in-loop */
+        const result = await submitSingleJson(attemptedIndex, apiKey);
+        /* eslint-enable no-await-in-loop */
+        results.push(result);
+        if (result.status !== 200) {
+            break;
+        }
     }
 
-    const results = await Promise.all(resultPromises);
-    const statusCodes = results.map((d) => d.status);
-    if (statusCodes.every(isValid)) {
-        await aSetex(`dss_bing_bookmark`, dailyCache, bookmark + dailyAttempts);
-        context.res = {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: results,
-        };
+    const lastStatus = results[results.length - 1].status;
+    if (lastStatus === 200) {
+        await aSetex(`dss_bing_bookmark`, dailyCache, bookmark + attempt + 1);
     } else {
-        context.res = {
-            status: 400,
-            headers: { 'Content-Type': 'application/json' },
-            body: results,
-        };
+        await aSetex(`dss_bing_bookmark`, dailyCache, bookmark + attempt);
     }
+
+    context.res = {
+        status: lastStatus,
+        headers: { 'Content-Type': 'application/json' },
+        body: results,
+    };
 };
