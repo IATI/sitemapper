@@ -68,15 +68,8 @@ const submitSingleJson = async (sitemapNumber, apiKey) => {
     return result;
 };
 
-module.exports = async (context, req) => {
-    const apiKey = req.query.api_key;
-    if (apiKey === undefined) {
-        context.res = {
-            status: 403,
-            body: 'Forbidden. Please provide API key.',
-        };
-        return;
-    }
+module.exports = async (context) => {
+    const apiKey = config.BING_API_KEY;
     let bookmark = 0;
     const extent = await getJsonExtent();
 

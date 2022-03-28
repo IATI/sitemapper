@@ -22,6 +22,7 @@ env:
   REDIS_KEY: ${{ secrets.DEV_REDIS_KEY }}
   DSS_API_KEY: ${{ secrets.DEV_DSS_API_KEY }}
   KV_URI: ${{ secrets.DEV_KV_URI }}
+  BING_API_KEY: ${{ secrets.DEV_BING_API_KEY }}
 
 jobs:
   should_run:
@@ -99,6 +100,11 @@ jobs:
                 {
                     "name": "DSS_API_KEY",
                     "value": "${{ env.DSS_API_KEY }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "BING_API_KEY",
+                    "value": "${{ env.BING_API_KEY }}",
                     "slotSetting": false
                 }
             ]

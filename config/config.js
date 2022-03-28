@@ -13,4 +13,5 @@ module.exports = {
     REDIS_CACHE_SEC: process.env.REDIS_CACHE_SEC || 86400,
     REDIS_KEY: process.env.REDIS_KEY,
     REDIS_HOSTNAME: process.env.REDIS_HOSTNAME,
+    BING_API_KEY: process.env.BING_API_KEY,
 };
