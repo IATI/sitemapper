@@ -4,7 +4,7 @@ const config = require('../config/config');
 
 const apiQuota = 500;
 const dailyAttempts = 20;
-const dailyCache = 172800;
+const weeklyCache = 604800;
 const additionalPages = ['about', 'advanced', 'simple'];
 
 const axiosConfig = {
@@ -107,9 +107,9 @@ module.exports = async (context, req) => {
 
     const lastStatus = results[results.length - 1].status;
     if (lastStatus === 200) {
-        await aSetex(`dss_bing_bookmark`, dailyCache, bookmark + attempt + 1);
+        await aSetex(`dss_bing_bookmark`, weeklyCache, bookmark + attempt + 1);
     } else {
-        await aSetex(`dss_bing_bookmark`, dailyCache, bookmark + attempt);
+        await aSetex(`dss_bing_bookmark`, weeklyCache, bookmark + attempt);
     }
 
     context.res = {
