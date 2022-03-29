@@ -68,7 +68,14 @@ const submitSingleJson = async (sitemapNumber, apiKey) => {
     return result;
 };
 
-exports.submitBing = async () => {
+module.exports = async (context, bingTimer) => {
+    if (bingTimer.isPastDue) {
+        context.log('Timer function is running late');
+    }
+    if (siteUrl !== 'https://datastore.iatistandard.org/') {
+        context.log('Skipping run... Not production URL...');
+        return;
+    }
     const apiKey = config.BING_API_KEY;
     let bookmark = 0;
     const extent = await getJsonExtent();
@@ -105,5 +112,5 @@ exports.submitBing = async () => {
         await aSetex(`dss_bing_bookmark`, weeklyCache, bookmark + attempt);
     }
 
-    return results;
+    context.log(results);
 };
