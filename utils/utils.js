@@ -68,7 +68,7 @@ const submitSingleJson = async (sitemapNumber, apiKey) => {
     return result;
 };
 
-module.exports = async (context) => {
+exports.submitBing = async () => {
     const apiKey = config.BING_API_KEY;
     let bookmark = 0;
     const extent = await getJsonExtent();
@@ -105,9 +105,5 @@ module.exports = async (context) => {
         await aSetex(`dss_bing_bookmark`, weeklyCache, bookmark + attempt);
     }
 
-    context.res = {
-        status: lastStatus,
-        headers: { 'Content-Type': 'application/json' },
-        body: results,
-    };
+    return results;
 };
