@@ -74,11 +74,11 @@ const getSingleSitemap = async (sitemapNumber) => {
         '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">';
     const activities = await getActivitySlice(sitemapNumber);
     sitemapString += activities
-        .map((d) => `<url><loc>${siteUrl}activity/${encodeXML(encodeURI(d))}</loc></url>`)
+        .map((d) => `<url><loc>${siteUrl}activity/${encodeXML(encodeURIComponent(d))}</loc></url>`)
         .join('');
     if (activities.length < sitemapLimit && sitemapLimit < 50000) {
         sitemapString += additionalPages
-            .map((d) => `<url><loc>${siteUrl}${encodeXML(encodeURI(d))}</loc></url>`)
+            .map((d) => `<url><loc>${siteUrl}${encodeXML(encodeURIComponent(d))}</loc></url>`)
             .join('');
     }
     sitemapString += '</urlset>';

@@ -45,9 +45,11 @@ const getJsonExtent = async () => {
 
 const submitSingleJson = async (sitemapNumber, apiKey) => {
     const activities = await getActivitySlice(sitemapNumber);
-    const urlList = activities.map((d) => `${siteUrl}activity/${encodeURI(d)}`);
+    const urlList = activities.map((d) => `${siteUrl}activity/${encodeURIComponent(d)}`);
     if (activities.length < apiQuota && apiQuota < 50000) {
-        additionalPages.map((d) => `${siteUrl}${encodeURI(d)}`).forEach((d) => urlList.push(d));
+        additionalPages
+            .map((d) => `${siteUrl}${encodeURIComponent(d)}`)
+            .forEach((d) => urlList.push(d));
     }
     const sitemapJson = {
         siteUrl: siteUrl.slice(0, -1),
