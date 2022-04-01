@@ -18,6 +18,10 @@ env:
   KV_URI: ${{ secrets.PROD_KV_URI }}
   BING_API_KEY: ${{ secrets.PROD_BING_API_KEY }}
   AZURE_FUNCTION_KEY: ${{ secrets.PROD_AZURE_FUNCTION_KEY }}
+  VALIDATOR_FRONTEND_URL: ${{ secrets.PROD_VALIDATOR_FRONTEND_URL }}
+  VALIDATOR_SERVICES_API_URL: ${{ secrets.PROD_VALIDATOR_SERVICES_API_URL }}
+  VALIDATOR_SERVICES_API_KEY: ${{ secrets.PROD_VALIDATOR_SERVICES_API_KEY }}
+
 
 jobs:
   build-deploy:
@@ -95,6 +99,21 @@ jobs:
                 {
                     "name": "BING_API_KEY",
                     "value": "${{ env.BING_API_KEY }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "VALIDATOR_FRONTEND_URL",
+                    "value": "${{ env.VALIDATOR_FRONTEND_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "VALIDATOR_SERVICES_API_URL",
+                    "value": "${{ env.VALIDATOR_SERVICES_API_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "VALIDATOR_SERVICES_API_KEY",
+                    "value": "${{ env.VALIDATOR_SERVICES_API_KEY }}",
                     "slotSetting": false
                 }
             ]
