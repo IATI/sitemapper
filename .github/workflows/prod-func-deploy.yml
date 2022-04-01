@@ -105,6 +105,9 @@ jobs:
           app-name: ${{ env.NAME }}-${{ env.STAGE }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
 
+      - name: "Wait for 5 minutes"
+        run: sleep 300
+
       - name: 'Sync Azure Function Triggers'
         shell: bash
         run: |
