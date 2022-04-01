@@ -17,6 +17,7 @@ env:
   DSS_API_KEY: ${{ secrets.PROD_DSS_API_KEY }}
   KV_URI: ${{ secrets.PROD_KV_URI }}
   BING_API_KEY: ${{ secrets.PROD_BING_API_KEY }}
+  AZURE_FUNCTION_KEY: ${{ secrets.PROD_AZURE_FUNCTION_KEY }}
 
 jobs:
   build-deploy:
@@ -103,6 +104,11 @@ jobs:
         with:
           app-name: ${{ env.NAME }}-${{ env.STAGE }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+
+      - name: 'Sync Azure Function Triggers'
+        shell: bash
+        run: |
+          curl --header "Content-Length: 0" -X POST https://${{ env.NAME }}-${{ env.STAGE }}.azurewebsites.net/admin/host/synctriggers?code=${{ AZURE_FUNCTION_KEY }}
 
   integration-test:
     needs: build-deploy
