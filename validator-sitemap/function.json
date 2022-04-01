@@ -1,0 +1,20 @@
+{
+    "bindings": [
+        {
+            "authLevel": "anonymous",
+            "type": "HttpTrigger",
+            "direction": "in",
+            "name": "req",
+            "methods": [
+                "get",
+                "head"
+            ],
+            "route": "validator/sitemap.xml"
+        },
+        {
+            "type": "http",
+            "direction": "out",
+            "name": "res"
+        }
+    ]
+}
