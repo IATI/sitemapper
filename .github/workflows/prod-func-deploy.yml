@@ -108,7 +108,7 @@ jobs:
       - name: 'Sync Azure Function Triggers'
         shell: bash
         run: |
-          curl --header "Content-Length: 0" -X POST https://${{ env.NAME }}-${{ env.STAGE }}.azurewebsites.net/admin/host/synctriggers?code=${{ AZURE_FUNCTION_KEY }}
+          curl --header "Content-Length: 0" -X POST https://${{ env.NAME }}-${{ env.STAGE }}.azurewebsites.net/admin/host/synctriggers?code=${{ env.AZURE_FUNCTION_KEY }}
 
   integration-test:
     needs: build-deploy
