@@ -6,6 +6,10 @@ const sitemapLimit = 25000;
 const cacheSeconds = 6000;
 const additionalPages = ['about', 'advanced', 'simple'];
 
+const replaceForwardSlash = function (str) {
+    return str.replace(/\//g, '-');
+};
+
 const encodeXML = function (str) {
     return str
         .replace(/&/g, '&amp;')
@@ -74,7 +78,12 @@ const getSingleSitemap = async (sitemapNumber) => {
         '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">';
     const activities = await getActivitySlice(sitemapNumber);
     sitemapString += activities
-        .map((d) => `<url><loc>${siteUrl}activity/${encodeXML(encodeURIComponent(d))}</loc></url>`)
+        .map(
+            (d) =>
+                `<url><loc>${siteUrl}activity/${encodeXML(
+                    encodeURIComponent(replaceForwardSlash(d))
+                )}</loc></url>`
+        )
         .join('');
     if (activities.length < sitemapLimit && sitemapLimit < 50000) {
         sitemapString += additionalPages
