@@ -6,18 +6,15 @@ const sitemapLimit = 25000;
 const cacheSeconds = 6000;
 const additionalPages = ['about', 'advanced', 'simple'];
 
-const replaceForwardSlash = function (str) {
-    return str.replace(/\//g, '-');
-};
+const replaceForwardSlash = (str) => str.replace(/\//g, '-');
 
-const encodeXML = function (str) {
-    return str
+const encodeXML = (str) =>
+    str
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&apos;');
-};
 
 const axiosConfig = {
     auth: {
