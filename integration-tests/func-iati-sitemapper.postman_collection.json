@@ -46,7 +46,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
-							"pm.test(\"Reponse body contains 'sitemapindex.'\", function () {",
+							"pm.test(\"Reponse body contains 'urlset.'\", function () {",
 							"    pm.expect(pm.response.text()).to.include(\"urlset\");",
 							"});"
 						],
@@ -65,6 +65,38 @@
 					"path": [
 						"dss",
 						"sitemap-1.xml"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /validator/sitemap.xml",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Reponse body contains 'urlset.'\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"urlset\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/validator/sitemap.xml",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"validator",
+						"sitemap.xml"
 					]
 				}
 			},
