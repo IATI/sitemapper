@@ -3,14 +3,13 @@ const config = require('../config/config');
 
 const additionalPages = ['', 'about', 'validate', 'organisations'];
 
-const encodeXML = function (str) {
-    return str
+const encodeXML = (str) =>
+    str
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&apos;');
-};
 
 const fetchConfig = {
     headers: {
