@@ -1,4 +1,4 @@
-const axios = require('axios');
+const fetch = require('node-fetch');
 const config = require('../config/config');
 
 const additionalPages = ['', 'about', 'validate', 'organisations'];
@@ -12,7 +12,7 @@ const encodeXML = function (str) {
         .replace(/'/g, '&apos;');
 };
 
-const axiosConfig = {
+const fetchConfig = {
     headers: {
         [`${config.VALIDATOR_SERVICES_API_KEY_NAME}`]: config.VALIDATOR_SERVICES_API_KEY_VALUE,
     },
@@ -22,7 +22,8 @@ const siteUrl = config.VALIDATOR_FRONTEND_URL;
 const publisherUrl = `${config.VALIDATOR_SERVICES_API_URL}pvt/publishers`;
 
 const getPublishers = async () => {
-    const publishers = await axios.get(publisherUrl, axiosConfig).then((result) => result.data);
+    const response = await fetch(publisherUrl, fetchConfig);
+    const publishers = await response.json();
     return publishers;
 };
 
