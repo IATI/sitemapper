@@ -18,7 +18,7 @@ const fetchConfig = {
 };
 
 const siteUrl = config.VALIDATOR_FRONTEND_URL;
-const publisherUrl = `${config.VALIDATOR_SERVICES_API_URL}pvt/publishers`;
+const publisherUrl = `${config.VALIDATOR_SERVICES_API_URL}/pvt/publishers`;
 
 const getPublishers = async () => {
     const response = await fetch(publisherUrl, fetchConfig);
