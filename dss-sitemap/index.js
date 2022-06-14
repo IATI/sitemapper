@@ -30,7 +30,8 @@ const getActivityCount = async () => {
     if ((await aExists('dss_sitemap_count')) === 0) {
         const countUrl = `${activityFacetBaseUrl}&facet.limit=0`;
         const response = await fetch(countUrl, fetchConfig);
-        const { numFound } = await response.json();
+        const body = await response.json();
+        const { numFound } = body.response;
         await aSetex('dss_sitemap_count', cacheSeconds, numFound);
         return numFound;
     }
