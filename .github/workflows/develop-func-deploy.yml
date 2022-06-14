@@ -25,8 +25,9 @@ env:
   REDIS_KEY: ${{ secrets.DEV_REDIS_KEY }}
   KV_URI: ${{ secrets.DEV_KV_URI }}
   VALIDATOR_FRONTEND_URL: ${{ secrets.DEV_VALIDATOR_FRONTEND_URL }}
-  VALIDATOR_SERVICES_API_URL: ${{ secrets.DEV_VALIDATOR_SERVICES_API_URL }}
-  VALIDATOR_SERVICES_API_KEY: ${{ secrets.DEV_VALIDATOR_SERVICES_API_KEY }}
+  VALIDATOR_SERVICES_API_URL: ${{ secrets.DEV_VALIDATOR_SERVICES_URL }}
+  VALIDATOR_SERVICES_API_KEY_NAME: ${{ secrets.DEV_VALIDATOR_SERVICES_KEY_NAME }}
+  VALIDATOR_SERVICES_API_KEY_VALUE: ${{ secrets.DEV_VALIDATOR_SERVICES_KEY_VALUE }}
 
 jobs:
   should_run:
@@ -122,8 +123,13 @@ jobs:
                     "slotSetting": false
                 },
                 {
-                    "name": "VALIDATOR_SERVICES_API_KEY",
-                    "value": "${{ env.VALIDATOR_SERVICES_API_KEY }}",
+                    "name": "VALIDATOR_SERVICES_API_KEY_NAME",
+                    "value": "${{ env.VALIDATOR_SERVICES_API_KEY_NAME }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "VALIDATOR_SERVICES_API_KEY_VALUE",
+                    "value": "${{ env.VALIDATOR_SERVICES_API_KEY_VALUE }}",
                     "slotSetting": false
                 }
             ]

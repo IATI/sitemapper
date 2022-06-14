@@ -14,7 +14,7 @@ const encodeXML = function (str) {
 
 const axiosConfig = {
     headers: {
-        'Ocp-Apim-Subscription-Key': config.VALIDATOR_SERVICES_API_KEY,
+        [`${config.VALIDATOR_SERVICES_API_KEY_NAME}`]: config.VALIDATOR_SERVICES_API_KEY_VALUE,
     },
 };
 
