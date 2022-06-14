@@ -1,6 +1,7 @@
 name: Deploy_To_Dev_Function_On_Push
 
 on:
+  workflow_dispatch:
   push:
     paths-ignore: # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
       - '**/README.md' # don't run on README.md file updates anywhere in repo
@@ -15,12 +16,13 @@ env:
   NAME: func-iati-sitemapper
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x' # set this to the node version to use
-  DDS_API_URL: ${{ secrets.DEV_DDS_API_URL }}
+  SOLR_API_URL: ${{ secrets.DEV_SOLR_API_URL }}
+  SOLR_USER: ${{ secrets.DEV_SOLR_USER }}
+  SOLR_PASSWORD: ${{ secrets.DEV_SOLR_PASSWORD }}
   DDS_FRONTEND_URL: ${{ secrets.DEV_DDS_FRONTEND_URL }}
   REDIS_HOSTNAME: ${{ secrets.DEV_REDIS_HOSTNAME }}
   REDIS_PORT: ${{ secrets.REDIS_PORT }}
   REDIS_KEY: ${{ secrets.DEV_REDIS_KEY }}
-  DSS_API_KEY: ${{ secrets.DEV_DSS_API_KEY }}
   KV_URI: ${{ secrets.DEV_KV_URI }}
   VALIDATOR_FRONTEND_URL: ${{ secrets.DEV_VALIDATOR_FRONTEND_URL }}
   VALIDATOR_SERVICES_API_URL: ${{ secrets.DEV_VALIDATOR_SERVICES_API_URL }}
@@ -65,8 +67,18 @@ jobs:
           app-settings-json: |
             [
                 {
-                    "name": "DDS_API_URL",
-                    "value": "${{ env.DDS_API_URL }}",
+                    "name": "SOLR_API_URL",
+                    "value": "${{ env.SOLR_API_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "SOLR_USER",
+                    "value": "${{ env.SOLR_USER }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "SOLR_PASSWORD",
+                    "value": "${{ env.SOLR_PASSWORD }}",
                     "slotSetting": false
                 },
                 {
@@ -97,11 +109,6 @@ jobs:
                 {
                     "name": "AzureWebJobsSecretStorageKeyVaultUri",
                     "value": "${{ env.KV_URI }}",
-                    "slotSetting": false
-                },
-                {
-                    "name": "DSS_API_KEY",
-                    "value": "${{ env.DSS_API_KEY }}",
                     "slotSetting": false
                 },
                 {

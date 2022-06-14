@@ -20,12 +20,13 @@ const encodeXML = function (str) {
 };
 
 const axiosConfig = {
-    headers: {
-        'Ocp-Apim-Subscription-Key': config.DSS_API_KEY,
+    auth: {
+        username: config.SOLR_USER,
+        password: config.SOLR_PASSWORD,
     },
 };
 const siteUrl = config.DDS_FRONTEND_URL;
-const activityFacetBaseUrl = `${config.DDS_API_URL}activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0`;
+const activityFacetBaseUrl = `${config.SOLR_API_URL}activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0`;
 
 const getActivityCount = async () => {
     if ((await aExists('dss_sitemap_count')) === 0) {
