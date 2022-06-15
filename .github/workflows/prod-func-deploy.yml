@@ -9,17 +9,18 @@ env:
   NAME: func-iati-sitemapper
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.x' # set this to the node version to use
-  DDS_API_URL: ${{ secrets.PROD_DDS_API_URL }}
+  SOLR_API_URL: ${{ secrets.PROD_SOLR_API_URL }}
+  SOLR_USER: ${{ secrets.PROD_SOLR_USER }}
+  SOLR_PASSWORD: ${{ secrets.PROD_SOLR_PASSWORD }}
   DDS_FRONTEND_URL: ${{ secrets.PROD_DDS_FRONTEND_URL }}
   REDIS_HOSTNAME: ${{ secrets.PROD_REDIS_HOSTNAME }}
   REDIS_PORT: ${{ secrets.REDIS_PORT }}
   REDIS_KEY: ${{ secrets.PROD_REDIS_KEY }}
-  DSS_API_KEY: ${{ secrets.PROD_DSS_API_KEY }}
   KV_URI: ${{ secrets.PROD_KV_URI }}
   VALIDATOR_FRONTEND_URL: ${{ secrets.PROD_VALIDATOR_FRONTEND_URL }}
-  VALIDATOR_SERVICES_API_URL: ${{ secrets.PROD_VALIDATOR_SERVICES_API_URL }}
-  VALIDATOR_SERVICES_API_KEY: ${{ secrets.PROD_VALIDATOR_SERVICES_API_KEY }}
-
+  VALIDATOR_SERVICES_API_URL: ${{ secrets.PROD_VALIDATOR_SERVICES_URL }}
+  VALIDATOR_SERVICES_API_KEY_NAME: ${{ secrets.PROD_VALIDATOR_SERVICES_KEY_NAME }}
+  VALIDATOR_SERVICES_API_KEY_VALUE: ${{ secrets.PROD_VALIDATOR_SERVICES_KEY_VALUE }}
 
 jobs:
   build-deploy:
@@ -55,8 +56,18 @@ jobs:
           app-settings-json: |
             [
                 {
-                    "name": "DDS_API_URL",
-                    "value": "${{ env.DDS_API_URL }}",
+                    "name": "SOLR_API_URL",
+                    "value": "${{ env.SOLR_API_URL }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "SOLR_USER",
+                    "value": "${{ env.SOLR_USER }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "SOLR_PASSWORD",
+                    "value": "${{ env.SOLR_PASSWORD }}",
                     "slotSetting": false
                 },
                 {
@@ -90,11 +101,6 @@ jobs:
                     "slotSetting": false
                 },
                 {
-                    "name": "DSS_API_KEY",
-                    "value": "${{ env.DSS_API_KEY }}",
-                    "slotSetting": false
-                },
-                {
                     "name": "VALIDATOR_FRONTEND_URL",
                     "value": "${{ env.VALIDATOR_FRONTEND_URL }}",
                     "slotSetting": false
@@ -105,8 +111,13 @@ jobs:
                     "slotSetting": false
                 },
                 {
-                    "name": "VALIDATOR_SERVICES_API_KEY",
-                    "value": "${{ env.VALIDATOR_SERVICES_API_KEY }}",
+                    "name": "VALIDATOR_SERVICES_API_KEY_NAME",
+                    "value": "${{ env.VALIDATOR_SERVICES_API_KEY_NAME }}",
+                    "slotSetting": false
+                },
+                {
+                    "name": "VALIDATOR_SERVICES_API_KEY_VALUE",
+                    "value": "${{ env.VALIDATOR_SERVICES_API_KEY_VALUE }}",
                     "slotSetting": false
                 }
             ]

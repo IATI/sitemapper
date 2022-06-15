@@ -1,4 +1,4 @@
-const axios = require('axios');
+const fetch = require('node-fetch');
 const { aSetex, aGet, aExists } = require('../config/redis');
 const config = require('../config/config');
 
@@ -6,35 +6,34 @@ const sitemapLimit = 25000;
 const cacheSeconds = 6000;
 const additionalPages = ['about', 'advanced', 'simple'];
 
-const replaceForwardSlash = function (str) {
-    return str.replace(/\//g, '-');
-};
+const replaceForwardSlash = (str) => str.replace(/\//g, '-');
 
-const encodeXML = function (str) {
-    return str
+const encodeXML = (str) =>
+    str
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&apos;');
-};
 
-const axiosConfig = {
+const fetchConfig = {
     headers: {
-        'Ocp-Apim-Subscription-Key': config.DSS_API_KEY,
+        Authorization: `Basic ${Buffer.from(`${config.SOLR_USER}:${config.SOLR_PASSWORD}`).toString(
+            'base64'
+        )}`,
     },
 };
 const siteUrl = config.DDS_FRONTEND_URL;
-const activityFacetBaseUrl = `${config.DDS_API_URL}activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0`;
+const activityFacetBaseUrl = `${config.SOLR_API_URL}activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0`;
 
 const getActivityCount = async () => {
     if ((await aExists('dss_sitemap_count')) === 0) {
         const countUrl = `${activityFacetBaseUrl}&facet.limit=0`;
-        const activityCount = await axios
-            .get(countUrl, axiosConfig)
-            .then((result) => result.data.response.numFound);
-        await aSetex('dss_sitemap_count', cacheSeconds, activityCount);
-        return activityCount;
+        const response = await fetch(countUrl, fetchConfig);
+        const body = await response.json();
+        const { numFound } = body.response;
+        await aSetex('dss_sitemap_count', cacheSeconds, numFound);
+        return numFound;
     }
     const activityCount = await aGet('dss_sitemap_count');
     return activityCount;
@@ -45,11 +44,11 @@ const getActivitySlice = async (chunkIndex) => {
         const sliceUrl = `${activityFacetBaseUrl}&facet.limit=${sitemapLimit}&facet.offset=${
             chunkIndex * sitemapLimit
         }`;
-        const activitySlice = await axios
-            .get(sliceUrl, axiosConfig)
-            .then((result) =>
-                result.data.facet_counts.facet_fields.iati_identifier.filter((d, i) => i % 2 === 0)
-            );
+        const response = await fetch(sliceUrl, fetchConfig);
+        const data = await response.json();
+        const activitySlice = data.facet_counts.facet_fields.iati_identifier.filter(
+            (d, i) => i % 2 === 0
+        );
         await aSetex(
             `dss_sitemap_chunk_${chunkIndex}`,
             cacheSeconds,

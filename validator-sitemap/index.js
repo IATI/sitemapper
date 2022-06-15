@@ -1,28 +1,28 @@
-const axios = require('axios');
+const fetch = require('node-fetch');
 const config = require('../config/config');
 
 const additionalPages = ['', 'about', 'validate', 'organisations'];
 
-const encodeXML = function (str) {
-    return str
+const encodeXML = (str) =>
+    str
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&apos;');
-};
 
-const axiosConfig = {
+const fetchConfig = {
     headers: {
-        'Ocp-Apim-Subscription-Key': config.VALIDATOR_SERVICES_API_KEY,
+        [`${config.VALIDATOR_SERVICES_API_KEY_NAME}`]: config.VALIDATOR_SERVICES_API_KEY_VALUE,
     },
 };
 
 const siteUrl = config.VALIDATOR_FRONTEND_URL;
-const publisherUrl = `${config.VALIDATOR_SERVICES_API_URL}pvt/publishers`;
+const publisherUrl = `${config.VALIDATOR_SERVICES_API_URL}/pvt/publishers`;
 
 const getPublishers = async () => {
-    const publishers = await axios.get(publisherUrl, axiosConfig).then((result) => result.data);
+    const response = await fetch(publisherUrl, fetchConfig);
+    const publishers = await response.json();
     return publishers;
 };
 
