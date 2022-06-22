@@ -154,3 +154,14 @@ jobs:
       - name: 'Run integration tests' # Update -e environment file with an environment that points to your deployed instance
         run: |
           newman run integration-tests/func-iati-sitemapper.postman_collection.json -e integration-tests/envs/develop.postman_environment.json --working-dir integration-tests/test-files
+
+  # Mark status checks success/fail on dependabot commits for scheduled deploys
+  status_check_success:
+    needs: [build-deploy, integration-test]
+    if: success() && github.event_name == 'schedule'
+    uses: IATI/.github/.github/workflows/status_check_success.yaml@main
+
+  status_check_failure:
+    needs: [build-deploy, integration-test]
+    if: failure() && github.event_name == 'schedule'
+    uses: IATI/.github/.github/workflows/status_check_failure.yaml@main
