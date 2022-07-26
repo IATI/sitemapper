@@ -10,7 +10,6 @@
     },
     "author": "IATI",
     "dependencies": {
-        "applicationinsights": "^2.3.3",
         "dotenv": "^16.0.1",
         "node-fetch": "^2.6.7",
         "redis": "^3.1.2"
