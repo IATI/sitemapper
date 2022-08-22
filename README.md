@@ -28,10 +28,6 @@
 
 ### Description
 
-`APPINSIGHTS_INSTRUMENTATIONKEY`
-
--   Needs to be set for running locally, but will not actually report telemetry to the AppInsights instance in my experience
-
 `REDIS_PORT`
 
 -   local - `6379`
@@ -115,10 +111,6 @@ Hello, <Name>. This HTTP triggered function executed successfully.
 ## Creating a new route
 
 `func new --name <routename> --template "HTTP trigger" --authlevel "anonymous"`
-
-## AppInsights SDK
-
--   An example of using the `config/appInsights.js` utility is available in the `pvt-get/index.js` where execution time of the function is measured and then logged in 2 ways to the AppInsights Telemetry.
 
 ## Filesystem
 
