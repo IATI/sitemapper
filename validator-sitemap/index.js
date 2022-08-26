@@ -1,5 +1,5 @@
-const fetch = require('node-fetch');
-const config = require('../config/config');
+import fetch from 'node-fetch';
+import config from '../config/config.js';
 
 const additionalPages = ['', 'about', 'validate', 'organisations'];
 
@@ -45,7 +45,7 @@ const getSitemap = async () => {
     return sitemapString;
 };
 
-module.exports = async (context) => {
+export default async function validatorSitemap(context) {
     const responseMessage = await getSitemap();
 
     context.res = {
@@ -53,4 +53,4 @@ module.exports = async (context) => {
         headers: { 'Content-Type': 'application/xml' },
         body: responseMessage,
     };
-};
+}

@@ -2,6 +2,7 @@
     "name": "sitemapper",
     "version": "1.1.14",
     "description": "Dynamic sitemap function for static websites that need indexing",
+    "type": "module",
     "scripts": {
         "start": "func start --javascript",
         "start:verbose": "func start --javascript --verbose",
@@ -11,8 +12,8 @@
     "author": "IATI",
     "dependencies": {
         "dotenv": "^16.0.1",
-        "node-fetch": "^2.6.7",
-        "redis": "^3.1.2"
+        "node-fetch": "^3.2.10",
+        "redis": "^4.3.0"
     },
     "devDependencies": {
         "@prettier/plugin-xml": "^2.2.0",

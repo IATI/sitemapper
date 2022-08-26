@@ -6,7 +6,7 @@
 -   Node LTS
     -   This will be the latest LTS version supported by Azure Functions, set in `.nvmrc`
     -   once you've installed nvm run `nvm use` which will look at `.nvmrc` for the node version, if it's not installed then it will prompt you to install it with `nvm install <version> --latest-npm`
--   npm >=7
+-   npm >=8
     -   nvm will install the version of npm packaged with node. make sure to use the `--latest-npm` flag to get the latest version
     -   If you forgot to do that install the latest version of npm with `npm i -g npm`
 -   [Azure Functions Core Tools v3](https://github.com/Azure/azure-functions-core-tools)
@@ -54,7 +54,7 @@ Add in:
 Import
 
 ```
-const config = require("./config");
+import config from './config/config.js';
 
 let myEnvVariable = config.ENV_VAR
 ```
