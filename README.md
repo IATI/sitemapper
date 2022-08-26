@@ -6,7 +6,7 @@
 -   Node LTS
     -   This will be the latest LTS version supported by Azure Functions, set in `.nvmrc`
     -   once you've installed nvm run `nvm use` which will look at `.nvmrc` for the node version, if it's not installed then it will prompt you to install it with `nvm install <version> --latest-npm`
--   npm >=7
+-   npm >=8
     -   nvm will install the version of npm packaged with node. make sure to use the `--latest-npm` flag to get the latest version
     -   If you forgot to do that install the latest version of npm with `npm i -g npm`
 -   [Azure Functions Core Tools v3](https://github.com/Azure/azure-functions-core-tools)
@@ -54,7 +54,7 @@ Add in:
 Import
 
 ```
-const config = require("./config");
+import config from './config/config.js';
 
 let myEnvVariable = config.ENV_VAR
 ```
@@ -88,24 +88,58 @@ let myEnvVariable = config.ENV_VAR
 <0.0.0>
 ```
 
-### `GET /pvt?name=Name`
+### `GET /dss/sitemap-index.xml`
 
 -   Returns
 
-```
-Private API.
-Version <0.0.0>
-Hello, <Name>. This HTTP triggered function executed successfully.
+-   XML body of the sitemap index for the Datastore Search
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        <loc>https://datastore.iatistandard.org/sitemap-0.xml</loc>
+    </sitemap>
+    <sitemap>
+        <loc>https://datastore.iatistandard.org/sitemap-1.xml</loc>
+    </sitemap>
+...
 ```
 
-### `GET /pub?name=Name`
+### `GET /dss/sitemap-{n}.xml`
 
 -   Returns
 
+-   XML body of the sitemap of index n for the Datastore Search
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+    <url>
+        <loc>https://datastore.iatistandard.org/activity/AU-5-O14780-FJ</loc>
+    </url>
+    <url>
+        <loc>https://datastore.iatistandard.org/activity/AU-5-O14780-ID</loc>
+    </url>
+...
 ```
-Public API.
-Version <0.0.0>
-Hello, <Name>. This HTTP triggered function executed successfully.
+
+### `GET /validator/sitemap.xml`
+
+-   Returns
+
+-   XML body of the sitemap for the Validator
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+    <url>
+        <loc>https://iativalidator.iatistandard.org/organisation/lcdi_admin</loc>
+    </url>
+    <url>
+        <loc>https://iativalidator.iatistandard.org/organisation/inasp</loc>
+    </url>
+...
 ```
 
 ## Creating a new route

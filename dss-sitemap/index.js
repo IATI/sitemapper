@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-const { aSetex, aGet, aExists } = require('../config/redis');
-const config = require('../config/config');
+import fetch from 'node-fetch';
+import redisclient from '../config/redis.js';
+import config from '../config/config.js';
 
 const sitemapLimit = 25000;
 const cacheSeconds = 6000;
@@ -27,20 +27,20 @@ const siteUrl = config.DDS_FRONTEND_URL;
 const activityFacetBaseUrl = `${config.SOLR_API_URL}activity/select?q=*:*&facet=true&facet.field=iati_identifier&facet.mincount=1&facet.sort=index&rows=0`;
 
 const getActivityCount = async () => {
-    if ((await aExists('dss_sitemap_count')) === 0) {
+    if ((await redisclient.exists('dss_sitemap_count')) === 0) {
         const countUrl = `${activityFacetBaseUrl}&facet.limit=0`;
         const response = await fetch(countUrl, fetchConfig);
         const body = await response.json();
         const { numFound } = body.response;
-        await aSetex('dss_sitemap_count', cacheSeconds, numFound);
+        await redisclient.set('dss_sitemap_count', numFound, { EX: cacheSeconds });
         return numFound;
     }
-    const activityCount = await aGet('dss_sitemap_count');
+    const activityCount = await redisclient.get('dss_sitemap_count');
     return activityCount;
 };
 
 const getActivitySlice = async (chunkIndex) => {
-    if ((await aExists(`dss_sitemap_chunk_${chunkIndex}`)) === 0) {
+    if ((await redisclient.exists(`dss_sitemap_chunk_${chunkIndex}`)) === 0) {
         const sliceUrl = `${activityFacetBaseUrl}&facet.limit=${sitemapLimit}&facet.offset=${
             chunkIndex * sitemapLimit
         }`;
@@ -49,14 +49,12 @@ const getActivitySlice = async (chunkIndex) => {
         const activitySlice = data.facet_counts.facet_fields.iati_identifier.filter(
             (d, i) => i % 2 === 0
         );
-        await aSetex(
-            `dss_sitemap_chunk_${chunkIndex}`,
-            cacheSeconds,
-            JSON.stringify(activitySlice)
-        );
+        await redisclient.set(`dss_sitemap_chunk_${chunkIndex}`, JSON.stringify(activitySlice), {
+            EX: cacheSeconds,
+        });
         return activitySlice;
     }
-    const activitySlice = await aGet(`dss_sitemap_chunk_${chunkIndex}`);
+    const activitySlice = await redisclient.get(`dss_sitemap_chunk_${chunkIndex}`);
     return JSON.parse(activitySlice);
 };
 
@@ -93,7 +91,7 @@ const getSingleSitemap = async (sitemapNumber) => {
     return sitemapString;
 };
 
-module.exports = async (context, req) => {
+export default async function dssSitemap(context, req) {
     const sitemapId = req.params.id;
     let responseMessage = '';
 
@@ -109,4 +107,4 @@ module.exports = async (context, req) => {
         headers: { 'Content-Type': 'application/xml' },
         body: responseMessage,
     };
-};
+}
