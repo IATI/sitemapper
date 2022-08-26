@@ -88,24 +88,58 @@ let myEnvVariable = config.ENV_VAR
 <0.0.0>
 ```
 
-### `GET /pvt?name=Name`
+### `GET /dss/sitemap-index.xml`
 
 -   Returns
 
-```
-Private API.
-Version <0.0.0>
-Hello, <Name>. This HTTP triggered function executed successfully.
+-   XML body of the sitemap index for the Datastore Search
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        <loc>https://datastore.iatistandard.org/sitemap-0.xml</loc>
+    </sitemap>
+    <sitemap>
+        <loc>https://datastore.iatistandard.org/sitemap-1.xml</loc>
+    </sitemap>
+...
 ```
 
-### `GET /pub?name=Name`
+### `GET /dss/sitemap-{n}.xml`
 
 -   Returns
 
+-   XML body of the sitemap of index n for the Datastore Search
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+    <url>
+        <loc>https://datastore.iatistandard.org/activity/AU-5-O14780-FJ</loc>
+    </url>
+    <url>
+        <loc>https://datastore.iatistandard.org/activity/AU-5-O14780-ID</loc>
+    </url>
+...
 ```
-Public API.
-Version <0.0.0>
-Hello, <Name>. This HTTP triggered function executed successfully.
+
+### `GET /validator/sitemap.xml`
+
+-   Returns
+
+-   XML body of the sitemap for the Validator
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+    <url>
+        <loc>https://iativalidator.iatistandard.org/organisation/lcdi_admin</loc>
+    </url>
+    <url>
+        <loc>https://iativalidator.iatistandard.org/organisation/inasp</loc>
+    </url>
+...
 ```
 
 ## Creating a new route
