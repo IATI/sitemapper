@@ -7,17 +7,17 @@ on:
       - '**/README.md' # don't run on README.md file updates anywhere in repo
       - '**/dependabot.yml'
     branches:
-      - develop # update with develop when ready to deploy to Azure
-  # schedule: Uncomment when setting up template, ensures dependabot updates are deployed to dev at least daily
-  #   - cron: '17 04 * * *' # 0417am daily
+      - develop
+  schedule: # ensures dependabot updates are deployed to dev at least daily
+    - cron: '17 04 * * *' # 0417am daily
 
 env:
   STAGE: dev # suffix to indicate environment stage
   NAME: func-iati-sitemapper
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   SOLR_API_URL: ${{ secrets.DEV_SOLR_API_URL }}
-  SOLR_USER: ${{ secrets.DEV_SOLR_USER }}
-  SOLR_PASSWORD: ${{ secrets.DEV_SOLR_PASSWORD }}
+  SOLR_USER: ${{ secrets.DEV_SOLR_NONADMIN_USER_NAME }}
+  SOLR_PASSWORD: ${{ secrets.DEV_SOLR_NONADMIN_USER_PASSWORD }}
   DDS_FRONTEND_URL: ${{ secrets.DEV_DDS_FRONTEND_URL }}
   REDIS_HOSTNAME: ${{ secrets.DEV_REDIS_HOSTNAME }}
   REDIS_PORT: ${{ secrets.REDIS_PORT }}

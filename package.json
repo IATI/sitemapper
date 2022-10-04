@@ -2,6 +2,7 @@
     "name": "sitemapper",
     "version": "1.1.14",
     "description": "Dynamic sitemap function for static websites that need indexing",
+    "type": "module",
     "scripts": {
         "start": "func start --javascript",
         "start:verbose": "func start --javascript --verbose",
@@ -10,13 +11,13 @@
     },
     "author": "IATI",
     "dependencies": {
-        "dotenv": "^16.0.1",
-        "node-fetch": "^2.6.7",
-        "redis": "^3.1.2"
+        "dotenv": "^16.0.3",
+        "node-fetch": "^3.2.10",
+        "redis": "^4.3.1"
     },
     "devDependencies": {
         "@prettier/plugin-xml": "^2.2.0",
-        "eslint": "^8.22.0",
+        "eslint": "^8.24.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",
