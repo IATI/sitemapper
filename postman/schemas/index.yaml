@@ -1,0 +1,91 @@
+openapi: '3.0.0'
+info:
+  version: '1.1.15'
+  title: 'sitemapper'
+  description: API to return custom sitemaps for IATI websites
+
+servers:
+  - url: 'http://localhost:7071'
+    description: Local Function
+  - url: 'https://func-iati-sitemapper-dev.azurewebsites.net'
+    description: Dev environment Function (requires auth)
+  - url: 'https://func-iati-sitemapper-prod.azurewebsites.net'
+    description: Production environment Function (requires auth)
+
+paths:
+    /api/validator/sitemap.xml:
+      get:
+        description: Get sitemap for IATI Validator website
+        responses:
+          200:
+            description: Sitemap for IATI Validator website
+            $ref: "#/components/responses/Sitemap"
+          401:
+            $ref: "#/components/responses/UnauthorizedError"
+    /api/dss/sitemap-index.xml:
+      get:
+        description: 'Get sitemap index for Datastore Search website'
+        responses:
+          200:
+            description: Sitemap Index for Datastore Search website
+            $ref: "#/components/responses/SitemapIndex"
+          401:
+            $ref: "#/components/responses/UnauthorizedError"
+    /api/dss/sitemap-{id}.xml:
+      get:
+        description: 'Get a specific sitemap for Datastore Search website'
+        parameters:
+        - name: id
+          in: path
+          description: Sitemap ID from the index
+          required: true
+          schema:
+            type: integer
+            format: int64
+        responses:
+          200:
+            description: Sitemap for Datastore Search website
+            $ref: "#/components/responses/Sitemap"
+          401:
+            $ref: "#/components/responses/UnauthorizedError"
+
+components:
+    responses:
+      UnauthorizedError:
+        description: API key is missing or invalid
+      Sitemap:
+        description: A sitemap in https://www.sitemaps.org/protocol.html format
+        content:
+          application/xml:
+            schema:
+              description: A sitemap in https://www.sitemaps.org/protocol.html format
+              type: object
+      SitemapIndex:
+        description: A sitemap index in https://www.sitemaps.org/protocol.html format
+        content:
+          application/xml:
+            schema:
+              description: A sitemap index in https://www.sitemaps.org/protocol.html format
+              type: object
+          
+    schemas:
+        ResponseMessage:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              description: A human readable response message
+              type: string
+    securitySchemes:
+        ApiKeyHeader:
+            type: apiKey
+            in: header
+            name: x-functions-key
+        ApiKeyQuery:
+            type: apiKey
+            in: query
+            name: x-functions-key
+security:
+    - ApiKeyHeader: []
+    - ApiKeyQuery: []
