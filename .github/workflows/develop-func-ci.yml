@@ -10,22 +10,9 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v2.4.0
-
-      - name: 'Setup Node Environment'
-        uses: actions/setup-node@v2.5.1
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - name: 'Install Dependencies with Npm'
-        run: |
-          npm i -g npm
-          npm set-script prepare ""
-          npm ci --production
+    uses: IATI/.github/.github/workflows/build_node_save.yaml@main
+    with:
+      save_artifact: false
 
   automerge:
     needs: build

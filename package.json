@@ -12,8 +12,8 @@
     "author": "IATI",
     "dependencies": {
         "dotenv": "^16.0.3",
-        "node-fetch": "^3.2.10",
-        "redis": "^4.4.0"
+        "node-fetch": "^3.3.0",
+        "redis": "^4.5.0"
     },
     "devDependencies": {
         "@prettier/plugin-xml": "^2.2.0",
