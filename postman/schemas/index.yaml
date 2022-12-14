@@ -15,16 +15,18 @@ servers:
 paths:
     /api/validator/sitemap.xml:
       get:
-        description: Get sitemap for IATI Validator website, this sitemap includes all the /organisation pages, but not the validation report pages.
+        summary: Returns a Validator sitemap.
+        description: Get sitemap for Validator website, this sitemap includes all the /organisation/{org_name} pages, but not the validation report pages.
         responses:
           200:
-            description: Sitemap for IATI Validator website
+            description: Sitemap for Validator website
             $ref: "#/components/responses/Sitemap"
           401:
             $ref: "#/components/responses/UnauthorizedError"
     /api/dss/sitemap-index.xml:
       get:
-        description: 'Get sitemap index for Datastore Search website'
+        summary: Returns Datastore Search sitemap index.
+        description: Returns the sitemap index for Datastore Search single page application website.
         responses:
           200:
             description: Sitemap Index for Datastore Search website
@@ -33,7 +35,8 @@ paths:
             $ref: "#/components/responses/UnauthorizedError"
     /api/dss/sitemap-{id}.xml:
       get:
-        description: 'Get a specific sitemap for Datastore Search website, this sitemap includes every /activity page'
+        summary: Returns a Datastore Search sitemap.
+        description: Get a specific sitemap for Datastore Search website, these sitemaps include every /activity/{iati_identifier} page.
         parameters:
         - name: id
           in: path
