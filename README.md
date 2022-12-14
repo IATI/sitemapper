@@ -1,4 +1,10 @@
-# azure-function-node-microservice-template
+# sitemapper
+
+Azure Function to produce custom sitemaps for IATI's single page applications.
+
+## Endpoints
+
+See OpenAPI specification `postman/schemas/index.yaml`. To view locally in Swagger UI, you can use the `42crunch.vscode-openapi` VSCode extension.
 
 ## Prerequisities
 
@@ -14,9 +20,6 @@
 
 ## Getting Started
 
-1. Create a new repository from the template
-1. Follow instructions for nvm/node prerequisties above
-1. Update package.json with application name, repository, etc.
 1. Run `npm i`
 1. Run `npm start` to run the function locally using the Azure Functions Core Tools
 
@@ -25,23 +28,6 @@
 ### Set Up
 
 `cp .env.example .env`
-
-### Description
-
-`REDIS_PORT`
-
--   local - `6379`
--   Azure - `6380` (tls)
-
-`REDIS_KEY`
-
--   Access key from the Redis instance
-
-`REDIS_HOSTNAME`
-
--   Hostname of redis instance
-
--   If you set no environment variables the application will attempt to connect to the default host:port for a local redis instance `127.0.0.1:6379`
 
 ### Adding New
 
@@ -78,77 +64,9 @@ let myEnvVariable = config.ENV_VAR
 -   This is done with eslint following the airbnb-base style and using [Prettier](https://prettier.io). Implemented with [this](https://sourcelevel.io/blog/how-to-setup-eslint-and-prettier-on-node) guide.
 -   If you use VSCode the formatting will happen automagically on save due to the `.vscode/settings.json` > `"editor.formatOnSave": true` setting
 
-## Endpoints /api
-
-### `GET /pub/version`
-
--   Returns application version from `package.json`
-
-```
-<0.0.0>
-```
-
-### `GET /dss/sitemap-index.xml`
-
--   Returns
-
--   XML body of the sitemap index for the Datastore Search
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <sitemap>
-        <loc>https://datastore.iatistandard.org/sitemap-0.xml</loc>
-    </sitemap>
-    <sitemap>
-        <loc>https://datastore.iatistandard.org/sitemap-1.xml</loc>
-    </sitemap>
-...
-```
-
-### `GET /dss/sitemap-{n}.xml`
-
--   Returns
-
--   XML body of the sitemap of index n for the Datastore Search
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-    <url>
-        <loc>https://datastore.iatistandard.org/activity/AU-5-O14780-FJ</loc>
-    </url>
-    <url>
-        <loc>https://datastore.iatistandard.org/activity/AU-5-O14780-ID</loc>
-    </url>
-...
-```
-
-### `GET /validator/sitemap.xml`
-
--   Returns
-
--   XML body of the sitemap for the Validator
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-    <url>
-        <loc>https://iativalidator.iatistandard.org/organisation/lcdi_admin</loc>
-    </url>
-    <url>
-        <loc>https://iativalidator.iatistandard.org/organisation/inasp</loc>
-    </url>
-...
-```
-
 ## Creating a new route
 
 `func new --name <routename> --template "HTTP trigger" --authlevel "anonymous"`
-
-## Filesystem
-
--   Provided in `config/fileSystem.js` which can be imported to get the promisified versions of common `fs` functions since we're stuck with Node v12 for now (these are standard in Node v14)
 
 ## Integration Tests
 
@@ -162,32 +80,3 @@ let myEnvVariable = config.ENV_VAR
 
 Integration tests are written in Postman v2.1 format and run with newman
 Import the `integrations-tests/azure-function-node-microservice-template.postman_collection.json` into Postman and write additional tests there
-
-## Deployment
-
--   Update relevant items in `.github/workflows/develop-func-deploy.yml` (see comments inline)
--   Create a [Service Principal](https://github.com/IATI/IATI-Internal-Wiki/blob/main/IATI-Unified-Infra/ServicePrincipals.md) and set the DEV_AZURE_CREDENTIALS GitHub Secret
-
-## Redis-cli
-
-Connect to local Redis instance cli
-`redis-cli`
-
-Connect CLI to Azure
-`redis-cli -h $REDIS_HOSTNAME -p $REDIS_PORT -a $REDIS_KEY --tls`
-
-Check value for a key
-`get <key>`
-
-## API Keys in Key Vault
-
-Setting the following Environment variables on the App Service instance enables the API keys to be stored in Key Vault instead of the file storage account associated with the Function.
-`AzureWebJobsSecretStorageType`=keyvault
-`AzureWebJobsSecretStorageKeyVaultName`= ${{ secrets.`ENV`_KEY_VAULT_NAME }}
-
-You will need to turn on the System Assigned Managed Identity for the Function App:
-Function App > Settings > Identity
-
-Then you will also need to allow the Function to access the Key Vault by adding an [Access Policy](https://portal.azure.com/#@iatitech.onmicrosoft.com/resource/subscriptions/bcaf7a00-7a14-4932-ac41-7bb0dee0d2a9/resourceGroups/rg-sharedresources-dev/providers/Microsoft.KeyVault/vaults/kv-iati-dev/access_policies)
-
--   Secret - Get, List, Set, Delete
