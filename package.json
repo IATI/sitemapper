@@ -11,7 +11,7 @@
     },
     "author": "IATI",
     "dependencies": {
-        "dotenv": "^16.4.0",
+        "dotenv": "^16.4.1",
         "node-fetch": "^3.3.2",
         "redis": "^4.6.13"
     },
