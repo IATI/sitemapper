@@ -1,6 +1,17 @@
+# Summary
+
+| Product          | Site Mapper API                                                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Description      | Node.JS app that provides API end points to return dynamic site maps for the Validator website and the Datastore website.                          |
+| Website          | [https://validator.iatistandard.org](https://validator.iatistandard.org), [https://datastore.iatistandard.org](https://datastore.iatistandard.org) |
+| Related          | [IATI/validator-web](https://github.com/IATI/validator-web), [IATI/datastore-search](https://github.com/IATI/datastore-search)                     |
+| Documentation    | [https://developer.iatistandard.org/](https://developer.iatistandard.org/)                                                                         |
+| Technical Issues | https://github.com/IATI/sitemapper/issues                                                                                                          |
+| Support          | https://iatistandard.org/en/guidance/get-support/                                                                                                  |
+
 # sitemapper
 
-Azure Function to produce custom sitemaps for IATI's single page applications.
+Azure Function app to produce custom XML sitemaps for the IATI Validator (where the sitemap includes a link to each publisher's overview page) and the IATI Datastore (where a sitemap index is produced, and multiple sitemaps which include links to each activity's page on the Datastore).
 
 ## Endpoints
 
