@@ -1,6 +1,7 @@
 name: Deploy_To_Prod_Function_On_Release
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
