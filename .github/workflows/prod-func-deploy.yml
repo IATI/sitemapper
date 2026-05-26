@@ -25,7 +25,7 @@ jobs:
   build_save:
     uses: IATI/.github/.github/workflows/build_node_save.yaml@main
     with:
-      npm_version: ^10      
+      npm_version: ^11
       save_artifact: true
       artifact_name: build-artifact-prod
 

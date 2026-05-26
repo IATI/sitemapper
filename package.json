@@ -7,7 +7,7 @@
         "start": "func start --javascript",
         "start:verbose": "func start --javascript --verbose",
         "test": "newman run integration-tests/func-iati-sitemapper.postman_collection.json -e integration-tests/envs/local-function-7071.postman_environment.json",
-        "prepare": "husky install"
+        "prepare": "husky"
     },
     "author": "IATI",
     "dependencies": {
@@ -21,8 +21,8 @@
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-import": "^2.29.1",
-        "husky": "^8.0.3",
-        "lint-staged": "^14.0.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^17.0.5",
         "prettier": "^3.2.5"
     },
     "lint-staged": {
@@ -30,7 +30,7 @@
         "*.{js,css,md}": "prettier --write"
     },
     "engines": {
-        "node": "20.x.x",
-        "npm": "10.x.x"
+        "node": "24.x.x",
+        "npm": "11.x.x"
     }
 }
