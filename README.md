@@ -23,10 +23,10 @@ See OpenAPI specification `postman/schemas/index.yaml`. To view locally in Swagg
 -   Node LTS
     -   This will be the latest LTS version supported by Azure Functions, set in `.nvmrc`
     -   once you've installed nvm run `nvm use` which will look at `.nvmrc` for the node version, if it's not installed then it will prompt you to install it with `nvm install <version> --latest-npm`
--   npm >=8
+-   npm >=11
     -   nvm will install the version of npm packaged with node. make sure to use the `--latest-npm` flag to get the latest version
     -   If you forgot to do that install the latest version of npm with `npm i -g npm`
--   [Azure Functions Core Tools v3](https://github.com/Azure/azure-functions-core-tools)
+-   [Azure Functions Core Tools v4](https://github.com/Azure/azure-functions-core-tools)
 -   [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) version 2.4 or later.
 
 ## Getting Started
