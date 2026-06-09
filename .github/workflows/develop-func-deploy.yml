@@ -1,3 +1,4 @@
+---
 name: Deploy_To_Dev_Function_On_Push
 
 on:
@@ -59,7 +60,7 @@ jobs:
         with:
           creds: ${{ secrets.DEV_AZURE_CREDENTIALS }} # Service Principal credentials saved in GitHub Secrets
 
-      - name: Set Env variables for connecting to DSS API instance
+      - name: Set Env variables for connecting to application
         uses: Azure/appservice-settings@v1.1.1
         with:
           app-name: ${{env.NAME}}-${{env.STAGE}}
@@ -67,7 +68,7 @@ jobs:
             [
                 {
                     "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                    "value": "~16",
+                    "value": "~24",
                     "slotSetting": false
                 },
                 {
@@ -134,8 +135,23 @@ jobs:
                     "name": "VALIDATOR_SERVICES_API_KEY_VALUE",
                     "value": "${{ env.VALIDATOR_SERVICES_API_KEY_VALUE }}",
                     "slotSetting": false
+                },
+                {
+                    "name": "FUNCTIONS_WORKER_RUNTIME",
+                    "value": "node",
+                    "slotSetting": false
+                },
+                {
+                    "name": "FUNCTIONS_EXTENSION_VERSION",
+                    "value": "~4",
+                    "slotSetting": false
                 }
             ]
+          # Turn 32bit off because Node 24 on Windows App Service is 64-bit only
+          general-settings-json: |
+            {
+                "use32BitWorkerProcess": false
+            }
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1.4.4
